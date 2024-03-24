@@ -5,7 +5,7 @@ from icecream import ic
 class Parser:
     def __init__(self):
         '''
-        self.response = requests.get('https://www.warframe.com/zh-hant/droptables')a
+        self.response = requests.get('https://www.warframe.com/zh-hant/droptables')ad
         self.status = self.response.status_code
         self.content = self.response.text
         '''
