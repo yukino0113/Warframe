@@ -61,18 +61,13 @@ class WorldState:
         self.url = os.getenv('WORLD_STATE_URL')
         self.json = requests.get(self.url).json()
 
-
-        # self.time = self.json['Time']
-        # self.active_mission = [ActiveMission.parse_active_mission(x) for x in self.json['ActiveMissions']]
-        # self.syndicate_mission = [SyndicateMission.parse_syndicate(x) for x in self.json['SyndicateMissions']]
-        # self.sortie = [Sortie.parse_sortie(x) for x in self.json['Sorties']]
-        # self.lite_sortie = [LiteSortie.parse_lite_sortie(x) for x in self.json['LiteSorties']]
-        # self.invasion = [Invasion.parse_invasion(x) for x in self.json['Invasions']]
-        # self.void_storm = [VoidStorm.parse_void_storm(x) for x in self.json['VoidStorms']]
-        # self.daily_deal = [DailyDeal.parse_daily_deal(x) for x in self.json['DailyDeals']]
-
-
-        # ic(self.json['DailyDeals'])
-        # ic(self.daily_deal)
+        self.time = self.json['Time']
+        self.active_mission = [ActiveMission.parse_active_mission(x) for x in self.json['ActiveMissions']]
+        self.syndicate_mission = [SyndicateMission.parse_syndicate(x) for x in self.json['SyndicateMissions']]
+        self.sortie = [Sortie.parse_sortie(x) for x in self.json['Sorties']]
+        self.lite_sortie = [LiteSortie.parse_lite_sortie(x) for x in self.json['LiteSorties']]
+        self.invasion = [Invasion.parse_invasion(x) for x in self.json['Invasions']]
+        self.void_storm = [VoidStorm.parse_void_storm(x) for x in self.json['VoidStorms']]
+        self.daily_deal = [DailyDeal.parse_daily_deal(x) for x in self.json['DailyDeals']]
 
 
