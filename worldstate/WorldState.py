@@ -1,16 +1,15 @@
 import os
 import requests
-from icecream import ic
 
 from dotenv import load_dotenv
 
-from Warframe.worldstate.utils.ActiveMission import ActiveMission
-from Warframe.worldstate.utils.DailyDeal import DailyDeal
-from Warframe.worldstate.utils.Invasion import Invasion
-from Warframe.worldstate.utils.LiteSortie import LiteSortie
-from Warframe.worldstate.utils.Sortie import Sortie
-from Warframe.worldstate.utils.SyndicateMission import SyndicateMission
-from Warframe.worldstate.utils.Voidstorm import VoidStorm
+from worldstate.utils.ActiveMission import ActiveMission
+from worldstate.utils.DailyDeal import DailyDeal
+from worldstate.utils.Invasion import Invasion
+from worldstate.utils.LiteSortie import LiteSortie
+from worldstate.utils.Sortie import Sortie
+from worldstate.utils.SyndicateMission import SyndicateMission
+from worldstate.utils.Voidstorm import VoidStorm
 
 load_dotenv()
 

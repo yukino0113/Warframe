@@ -1,6 +1,6 @@
 import requests
 import os
-from bs4 import BeautifulSoup, NavigableString
+from bs4 import BeautifulSoup
 from icecream import ic
 from dotenv import load_dotenv
 load_dotenv()

@@ -1,5 +1,5 @@
-from Warframe.drop.utils.commonFunctions import strip_text, is_empty_row
-from Warframe.drop.utils.itemClass import Item
+from drop.utils.commonFunctions import strip_text, is_empty_row
+from drop.utils.itemClass import Item
 
 
 def mission_parser(tables):
