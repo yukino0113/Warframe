@@ -1,5 +1,9 @@
-def strip_text(text):
+from bs4.element import Tag
+
+
+def strip_text(text: Tag) -> str:
     return text.getText().strip()
 
-def check_empty_row(row):
+
+def is_empty_row(row: Tag) -> bool:
     return row.get('class') and 'blank-row' in row.get('class')

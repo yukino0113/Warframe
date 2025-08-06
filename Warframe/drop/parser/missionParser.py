@@ -1,4 +1,4 @@
-from Warframe.drop.utils.commonFunctions import strip_text, check_empty_row
+from Warframe.drop.utils.commonFunctions import strip_text, is_empty_row
 from Warframe.drop.utils.itemClass import Item
 
 
@@ -15,7 +15,7 @@ def mission_parser(tables):
             else:
                 rotation = text
         # 檢查空行
-        elif not check_empty_row(row):
+        elif not is_empty_row(row):
             name_tag = row.find('td')
             name = strip_text(name_tag)
             rarity_text = strip_text(name_tag.find_next('td'))
@@ -25,3 +25,5 @@ def mission_parser(tables):
             items.append(Item(name=name, rotation=rotation, rarity=rarity,
                               drop_rate=drop_rate, location=location))
     return items
+
+
