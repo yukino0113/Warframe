@@ -6,7 +6,7 @@ load_dotenv()
 
 
 def strip_text(text: Tag) -> str:
-    return text.getText().strip()
+    return text.get_text().strip()
 
 
 def is_empty_row(row: Tag) -> bool:
