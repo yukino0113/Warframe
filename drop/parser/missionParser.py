@@ -26,4 +26,3 @@ def mission_parser(tables):
                               drop_rate=drop_rate, location=location))
     return items
 
-
