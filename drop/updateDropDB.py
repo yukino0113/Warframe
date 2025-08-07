@@ -7,8 +7,10 @@ from dotenv import load_dotenv
 from db.time import get_last_update, update_time
 from drop.parser.timeParser import *
 from drop.parser.missionParser import *
-from drop.utils.commonFunctions import is_drop_table_available
-from db.mission_reward import delete_mission_reward_table, create_mission_reward_table, update_mission_rewards
+from drop.parser.relicParser import *
+from drop.utils.commonFunctions import *
+from db.mission_reward import *
+from db.relic import *
 
 load_dotenv()
 
@@ -55,9 +57,14 @@ class UpdateDropDB:
             for title, table in zip(h3, tables):
                 match title.get_text()[:-1]:
                     case 'Missions':
-                        # Update mission reward
                         delete_mission_reward_table()
                         create_mission_reward_table()
                         update_mission_rewards(mission_parser(table))
+                    case 'Relics':
+                        delete_relic_reward_table()
+                        create_relic_reward_table()
+                        update_relic_rewards(relic_parser(table))
+                    case _:
+                        logging.warning(f'MainUpdate: Unknown title: {title}')
 
             # update_time(generate_debug_time())
