@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 @dataclass
-class Item:
+class MissionReward:
     name: str
     rotation: str
     rarity: str
