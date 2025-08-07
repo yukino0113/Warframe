@@ -1,0 +1,31 @@
+from typing import List
+
+from db.utils.WarframeDB import WarframeDB, batch_insert_objects
+from drop.utils.itemClass import MissionReward
+
+
+def update_mission_rewards(mission_rewards: List[MissionReward]) -> bool:
+    return batch_insert_objects(
+        objects=mission_rewards,
+        table_name='mission_rewards',
+        columns=['name', 'rotation', 'rarity', 'drop_rate', 'location'],
+        value_extractor=lambda reward: (reward.name, reward.rotation, reward.rarity, reward.drop_rate, reward.location),
+        chunk_size=1000
+    )
+
+
+def create_mission_reward_table() -> None:
+    WarframeDB().create_table('mission_rewards',
+                              [
+                                  'id INTEGER PRIMARY KEY AUTOINCREMENT',
+                                  'name TEXT NOT NULL',
+                                  'rotation TEXT NOT NULL',
+                                  'rarity TEXT NOT NULL',
+                                  'drop_rate DECIMAL(5,4) NOT NULL',
+                                  'location TEXT NOT NULL',
+                                  'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
+                              ])
+
+
+def delete_mission_reward_table() -> None:
+    WarframeDB().drop_table('mission_rewards')

@@ -1,5 +1,5 @@
 from drop.utils.commonFunctions import strip_text, is_empty_row
-from drop.utils.itemClass import Item
+from drop.utils.itemClass import MissionReward
 
 
 def mission_parser(tables):
@@ -22,7 +22,7 @@ def mission_parser(tables):
             rarity = ' '.join(rarity_text.split(' ')[:-1])
             drop_rate = float(rarity_text.split(' ')[-1][1:-2])
 
-            items.append(Item(name=name, rotation=rotation, rarity=rarity,
-                              drop_rate=drop_rate, location=location))
+            items.append(MissionReward(name=name, rotation=rotation, rarity=rarity,
+                                       drop_rate=drop_rate, location=location))
     return items
 
