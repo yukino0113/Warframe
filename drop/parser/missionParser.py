@@ -16,13 +16,13 @@ def mission_parser(tables):
                 rotation = text
         # 檢查空行
         elif not is_empty_row(row):
-            name_tag = row.find('td')
-            name = strip_text(name_tag)
-            rarity_text = strip_text(name_tag.find_next('td'))
+            price_tag = row.find('td')
+            price = strip_text(price_tag)
+            rarity_text = strip_text(price_tag.find_next('td'))
             rarity = ' '.join(rarity_text.split(' ')[:-1])
             drop_rate = float(rarity_text.split(' ')[-1][1:-2])
 
-            items.append(MissionReward(name=name, rotation=rotation, rarity=rarity,
+            items.append(MissionReward(price=price, rotation=rotation, rarity=rarity,
                                        drop_rate=drop_rate, location=location))
     return items
 
