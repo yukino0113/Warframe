@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from abc import ABC, abstractmethod
 from typing import List, Any, Tuple
 import logging
 from bs4.element import Tag

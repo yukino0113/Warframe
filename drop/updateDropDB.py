@@ -53,6 +53,10 @@ class UpdateDropDB:
                         UpdateMissionReward(table).run_update()
                     case 'Relics':
                         UpdateRelicReward(table).run_update()
+                    case 'Dynamic Location Rewards':
+                        UpdateDynamicLocationReward(table).run_update()
+                    case 'Sorties':
+                        UpdateSortieReward(table).run_update()
                     case 'Keys':
                         pass
                     case _:
