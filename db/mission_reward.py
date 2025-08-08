@@ -8,10 +8,9 @@ def update_mission_rewards(mission_rewards: List[MissionReward]) -> bool:
     return batch_insert_objects(
         objects=mission_rewards,
         table_name='mission_rewards',
-        columns=['price', 'rotation', 'rarity', 'drop_rate', 'location'],
+        columns=['price', 'rotation', 'rarity', 'drop_rate', 'source'],
         value_extractor=lambda reward: (reward.price, reward.rotation, reward.rarity, reward.drop_rate,
-                                        reward.location),
-        chunk_size=1000
+                                        reward.source)
     )
 
 
@@ -23,7 +22,7 @@ def create_mission_reward_table() -> None:
                                   'rotation TEXT NOT NULL',
                                   'rarity TEXT NOT NULL',
                                   'drop_rate DECIMAL(5,4) NOT NULL',
-                                  'location TEXT NOT NULL',
+                                  'source TEXT NOT NULL',
                                   'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
                               ])
 

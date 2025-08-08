@@ -2,18 +2,19 @@ from dataclasses import dataclass
 
 @dataclass
 class MissionReward:
-    price: str
+    source: str
     rotation: str
+    price: str
     rarity: str
     drop_rate: float
-    location: str
 
 
 @dataclass
 class RelicReward:
-    price: str
+    relic: str
     radiant: str
+    price: str
+    # todo: remove rotation
     rotation: str
     rarity: str
     drop_rate: float
-    relic: str
