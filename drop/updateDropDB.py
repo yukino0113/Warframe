@@ -1,13 +1,10 @@
 import logging
+from datetime import datetime
 from bs4 import BeautifulSoup
 
 from drop.db.utils.time import get_last_update, update_time
-from drop.parser.timeParser import *
-from drop.parser.relicParser import *
 from drop.utils.commonFunctions import *
-from drop.db.relic import *
-from drop.varities.mission import mission_parser, delete_mission_reward_table, create_mission_reward_table, \
-    update_mission_rewards
+from drop.varities import *
 
 load_dotenv()
 
@@ -21,7 +18,7 @@ def generate_debug_time():
 class UpdateDropDB:
     def __init__(self) -> None:
         self.body = self.__get_body()
-        self.web_update_time = time_parser(self.body)
+        self.web_update_time = int(datetime.strptime(self.body.find('h3').previous.strip(), "%d %B, %Y").timestamp())
         self.update()
 
 
@@ -53,13 +50,9 @@ class UpdateDropDB:
             for title, table in zip(h3, tables):
                 match title.get_text()[:-1]:
                     case 'Missions':
-                        delete_mission_reward_table()
-                        create_mission_reward_table()
-                        update_mission_rewards(mission_parser(table))
+                        UpdateMissionReward(table).run_update()
                     case 'Relics':
-                        delete_relic_reward_table()
-                        create_relic_reward_table()
-                        update_relic_rewards(relic_parser(table))
+                        UpdateRelicReward(table).run_update()
                     case 'Keys':
                         pass
                     case _:
