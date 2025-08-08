@@ -1,13 +1,13 @@
 import logging
 from bs4 import BeautifulSoup
 
-from db.time import get_last_update, update_time
+from drop.db.time import get_last_update, update_time
 from drop.parser.timeParser import *
-from drop.parser.missionParser import *
 from drop.parser.relicParser import *
 from drop.utils.commonFunctions import *
-from db.mission_reward import *
-from db.relic import *
+from drop.db.relic import *
+from drop.varities.mission import mission_parser, delete_mission_reward_table, create_mission_reward_table, \
+    update_mission_rewards
 
 load_dotenv()
 

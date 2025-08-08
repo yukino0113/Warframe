@@ -1,6 +1,6 @@
 from typing import List
 
-from db.utils.WarframeDB import WarframeDB, batch_insert_objects
+from drop.db.WarframeDB import WarframeDB, batch_insert_objects
 from drop.utils.itemClass import RelicReward
 
 
