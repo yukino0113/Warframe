@@ -5,6 +5,21 @@ from .mission import UpdateMissionReward, MissionReward
 from .relic import UpdateRelicReward, RelicReward
 from .dynamic import UpdateDynamicLocationReward, DynamicLocationReward
 from .sortie import UpdateSortieReward, SortieReward
+from .bounty import UpdateBountyReward, BountyReward
+from .by_source import (
+    UpdateModBySource,
+    UpdateBlueprintBySource,
+    UpdateResourceBySource,
+    UpdateSigilBySource,
+    UpdateAdditionalItemBySource,
+    UpdateRelicBySource,
+)
+from .by_item import (
+    UpdateModByMod,
+    UpdateBlueprintByItem,
+    UpdateResourceByResource,
+)
+from .keys import UpdateKeyReward, KeyReward
 
 __all__ = [
     'BaseUpdater',
@@ -15,5 +30,18 @@ __all__ = [
     'UpdateDynamicLocationReward',
     'DynamicLocationReward',
     'UpdateSortieReward',
-    'SortieReward'
+    'SortieReward',
+    'UpdateBountyReward',
+    'BountyReward',
+    'UpdateModBySource',
+    'UpdateBlueprintBySource',
+    'UpdateResourceBySource',
+    'UpdateSigilBySource',
+    'UpdateAdditionalItemBySource',
+    'UpdateRelicBySource',
+    'UpdateModByMod',
+    'UpdateBlueprintByItem',
+    'UpdateResourceByResource',
+    'UpdateKeyReward',
+    'KeyReward',
 ]

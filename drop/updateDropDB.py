@@ -57,9 +57,39 @@ class UpdateDropDB:
                         UpdateDynamicLocationReward(table).run_update()
                     case 'Sorties':
                         UpdateSortieReward(table).run_update()
+                    case 'Cetus Bounty Rewards':
+                        UpdateBountyReward(table).run_update()
+                    case 'Orb Vallis Bounty Rewards':
+                        UpdateBountyReward(table).run_update()
+                    case 'Cambion Drift Bounty Rewards':
+                        UpdateBountyReward(table).run_update()
+                    case 'Zariman Bounty Rewards':
+                        UpdateBountyReward(table).run_update()
+                    case "Albrecht's Laboratories Bounty Rewards":
+                        UpdateBountyReward(table).run_update()
+                    case 'Hex Bounty Rewards':
+                        UpdateBountyReward(table).run_update()
+                    case 'Mod Drops by Source':
+                        UpdateModBySource(table).run_update()
+                    case 'Mod Drops by Mod':
+                        UpdateModByMod(table).run_update()
+                    case 'Blueprint/Item Drops by Source':
+                        UpdateBlueprintBySource(table).run_update()
+                    case 'Blueprint/Item Drops by Blueprint/Item':
+                        UpdateBlueprintByItem(table).run_update()
+                    case 'Resource Drops by Source':
+                        UpdateResourceBySource(table).run_update()
+                    case 'Resource Drops by Resource':
+                        UpdateResourceByResource(table).run_update()
+                    case 'Sigil Drops by Source':
+                        UpdateSigilBySource(table).run_update()
+                    case 'Additional Item Drops by Source':
+                        UpdateAdditionalItemBySource(table).run_update()
+                    case 'Relic Drops by Source':
+                        UpdateRelicBySource(table).run_update()
                     case 'Keys':
-                        pass
+                        UpdateKeyReward(table).run_update()
                     case _:
-                        logging.warning(f'MainUpdate: Unknown title: {title}')
+                        logging.error(f'MainUpdate: Unknown title: {title}')
 
-            update_time(generate_debug_time())
+            update_time(self.web_update_time)
