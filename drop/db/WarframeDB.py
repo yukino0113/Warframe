@@ -1,6 +1,10 @@
 from typing import Any, List
 import logging
 import sqlite3
+import os
+import dotenv
+
+dotenv.load_dotenv()
 
 
 def batch_insert_objects(objects: List[Any], table_name: str, columns: List[str],
@@ -35,7 +39,7 @@ def batch_insert_objects(objects: List[Any], table_name: str, columns: List[str]
 
 
 class WarframeDB:
-    def __init__(self, db_name='drop/db/warframe.db'):
+    def __init__(self, db_name=os.getenv('DB_NAME')):
         self.conn = sqlite3.connect(db_name)
         self.cursor = self.conn.cursor()
 
