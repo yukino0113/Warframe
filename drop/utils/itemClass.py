@@ -14,7 +14,5 @@ class RelicReward:
     relic: str
     radiant: str
     price: str
-    # todo: remove rotation
-    rotation: str
     rarity: str
     drop_rate: float

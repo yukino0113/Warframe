@@ -1,5 +1,5 @@
 from bs4.element import Tag
-from drop.utils.commonFunctions import strip_text, is_empty_row
+from drop.utils.commonFunctions import strip_text
 
 
 def parse_two_cell_price(price_tag: Tag) -> list:
