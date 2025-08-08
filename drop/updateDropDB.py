@@ -1,8 +1,5 @@
 import logging
-import requests
-import os
 from bs4 import BeautifulSoup
-from dotenv import load_dotenv
 
 from db.time import get_last_update, update_time
 from drop.parser.timeParser import *
@@ -19,7 +16,6 @@ load_dotenv()
 def generate_debug_time():
     logging.info('MainUpdate: Generating debug time')
     return get_last_update() + 1
-
 
 
 class UpdateDropDB:
@@ -64,7 +60,9 @@ class UpdateDropDB:
                         delete_relic_reward_table()
                         create_relic_reward_table()
                         update_relic_rewards(relic_parser(table))
+                    case 'Keys':
+                        pass
                     case _:
                         logging.warning(f'MainUpdate: Unknown title: {title}')
 
-            # update_time(generate_debug_time())
+            update_time(generate_debug_time())
