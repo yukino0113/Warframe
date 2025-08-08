@@ -1,5 +1,11 @@
 from bs4.element import Tag
-from drop.utils.commonFunctions import strip_text
+
+
+def strip_text(text: Tag) -> str:
+    return text.get_text().strip()
+
+
+
 
 
 def parse_two_cell_price(price_tag: Tag) -> list:

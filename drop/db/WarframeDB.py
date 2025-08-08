@@ -4,7 +4,7 @@ import sqlite3
 
 
 def batch_insert_objects(objects: List[Any], table_name: str, columns: List[str],
-                         value_extractor, chunk_size: int = 1000) -> bool:
+                         value_extractor, chunk_size: int = 5000) -> bool:
     if not objects:
         return False
 
