@@ -1,7 +1,7 @@
 import logging
 from bs4 import BeautifulSoup
 
-from drop.db.time import get_last_update, update_time
+from drop.db.utils.time import get_last_update, update_time
 from drop.parser.timeParser import *
 from drop.parser.relicParser import *
 from drop.utils.commonFunctions import *
