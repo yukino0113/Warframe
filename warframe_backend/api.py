@@ -142,16 +142,16 @@ def get_available_warframe() -> List[str]:
         SELECT price FROM relic_rewards
         WHERE relic IN ({qmarks})
           AND (
-                LOWER(price) LIKE '% neuroptics'
-             OR LOWER(price) LIKE '% systems'
-             OR LOWER(price) LIKE '% chassis'
+                LOWER(price) LIKE '% neuroptics blueprint'
+             OR LOWER(price) LIKE '% systems blueprint'
+             OR LOWER(price) LIKE '% chassis blueprint'
           )
         """,
         tuple(available_relics)
     )
 
     # From e.g., "Wisp Prime Neuroptics" -> "Wisp Prime"
-    suffixes = [" neuroptics", " systems", " chassis"]
+    suffixes = [" neuroptics blueprint", " system blueprints", " chassis blueprint"]
     names: set = set()
     for (price,) in rows:
         p = price.strip()
