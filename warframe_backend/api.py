@@ -127,8 +127,8 @@ def get_available_relics() -> set:
 
 def get_available_prime() -> List[str]:
     """
-    Return a list of Warframe set names (e.g., "Wisp Prime") that are currently obtainable
-    via relics which drop at least one of the three core components: Neuroptics, Systems, Chassis.
+    Return a list of Prime set names (e.g., "Wisp Prime") that are currently obtainable
+    via relics.
     Uses get_available_relics() to limit to currently available relics.
     """
     available_relics = get_available_relics()
@@ -136,6 +136,7 @@ def get_available_prime() -> List[str]:
         return []
 
     # Find rewards from those relics that are Warframe components we care about
+    # Use ? ma
     qmarks = ",".join(["?"] * len(available_relics))
     rows = fetchall(
         f"""
@@ -145,8 +146,6 @@ def get_available_prime() -> List[str]:
         """,
         tuple(available_relics)
     )
-
-    # From e.g., "Wisp Prime Neuroptics" -> "Wisp Prime"
     suffixes = ["Prime"]
     names: set = set()
     for (price,) in rows:
@@ -193,7 +192,7 @@ def list_items(type: Optional[str] = Query(None, pattern="^(warframe|weapon)$"),
                 vaulted = False
                 break
         results.append({
-            "id": item_name,  # use name as ID for MVP
+            "id": item_name,
             "name": item_name,
             "type": itype,
             "vaulted": vaulted,
