@@ -41,7 +41,7 @@ def batch_insert_objects(objects: List[Any], table_name: str, columns: List[str]
 class WarframeDB:
     def __init__(self, db_name=None):
         # Prefer DB_NAME, then DB_PATH, then default file path
-        env_db_name = os.getenv('DB_NAME') or os.getenv('DB_PATH') or 'drop/db/warframe.db'
+        env_db_name = os.getenv('DB_NAME') or os.getenv('DB_PATH') or 'drop_table/database/warframe.database'
         self.conn = sqlite3.connect(db_name or env_db_name)
         self.cursor = self.conn.cursor()
 

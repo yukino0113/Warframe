@@ -3,7 +3,7 @@ from typing import List, Any, Tuple
 import logging
 from bs4.element import Tag
 
-from drop.db.WarframeDB import WarframeDB, batch_insert_objects
+from database.WarframeDB import WarframeDB, batch_insert_objects
 
 
 class BaseUpdater(ABC):

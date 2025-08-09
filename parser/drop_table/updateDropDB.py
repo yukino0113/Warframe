@@ -1,10 +1,14 @@
 import logging
 from datetime import datetime
-from bs4 import BeautifulSoup
 
-from drop.db.utils.time import get_last_update, update_time
-from drop.utils.commonFunctions import *
-from drop.varities import *
+import requests
+from bs4 import BeautifulSoup
+from dotenv import load_dotenv
+import os
+
+from database.utils.time import get_last_update, update_time
+from parser.drop_table.utils.commonFunctions import is_drop_table_available
+from parser.drop_table.updater import *
 
 load_dotenv()
 
@@ -42,7 +46,7 @@ class UpdateDropDB:
             logging.info('MainUpdate: No update needed')
             return
         else:
-            logging.info('MainUpdate: Start updating drop table')
+            logging.info('MainUpdate: Start updating drop_table table')
 
             h3 = self.body.find_all('h3')[2:]
             tables = self.body.find_all('table')

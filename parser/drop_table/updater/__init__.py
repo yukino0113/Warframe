@@ -1,5 +1,5 @@
-from drop.varities.mission import UpdateMissionReward
-from drop.varities.relic import UpdateRelicReward
+from parser.drop_table.updater.mission import UpdateMissionReward
+from parser.drop_table.updater.relic import UpdateRelicReward
 from .base_updater import BaseUpdater
 from .mission import UpdateMissionReward, MissionReward
 from .relic import UpdateRelicReward, RelicReward

@@ -28,7 +28,7 @@ def parse_three_cell_price(first_td: Tag) -> list:
 def parse_row_source_chance(first_td: Tag) -> list:
     """
     Parses a 3-column data row where the structure is:
-    [source td] [drop chance td - ignored] [rarity-with-percent td]
+    [source td] [drop_table chance td - ignored] [rarity-with-percent td]
     Returns [source_text, rarity_label, drop_rate_float]
     """
     source_text = strip_text(first_td)

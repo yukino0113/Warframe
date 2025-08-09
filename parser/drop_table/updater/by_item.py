@@ -3,8 +3,8 @@ from typing import List, Tuple
 
 from bs4.element import Tag
 
-from drop.parser.commonParser import strip_text, parse_row_source_chance
-from drop.utils.commonFunctions import is_empty_row
+from parser.drop_table.utils.commonParser import strip_text, parse_row_source_chance
+from parser.drop_table.utils.commonFunctions import is_empty_row
 from .base_updater import BaseUpdater
 
 
@@ -58,7 +58,7 @@ class GenericByItemUpdater(BaseUpdater):
             if row.find('th'):
                 handle_header_row(row)
             elif not is_empty_row(row):
-                # Row structure: [source] [drop chance] [rarity%]
+                # Row structure: [source] [drop_table chance] [rarity%]
                 source, rarity, drop_rate = parse_row_source_chance(row.find('td'))
                 items.append(ByItemReward(
                     item=current_item,

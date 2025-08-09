@@ -3,8 +3,8 @@ from typing import List, Tuple
 
 from bs4.element import Tag
 
-from drop.parser.commonParser import parse_three_cell_price, strip_text
-from drop.utils.commonFunctions import is_empty_row
+from parser.drop_table.utils.commonParser import parse_three_cell_price, strip_text
+from parser.drop_table.utils.commonFunctions import is_empty_row
 from .base_updater import BaseUpdater
 
 
