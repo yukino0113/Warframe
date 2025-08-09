@@ -3,3 +3,5 @@ requests~=2.32.4
 beautifulsoup4~=4.13.4
 icecream~=2.1.5
 pandas~=2.2.3
+fastapi~=0.115.0
+uvicorn~=0.30.6
