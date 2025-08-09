@@ -125,7 +125,7 @@ def get_available_relics() -> set:
     return available_candidates & warframe_relics
 
 
-def get_available_warframe() -> List[str]:
+def get_available_prime() -> List[str]:
     """
     Return a list of Warframe set names (e.g., "Wisp Prime") that are currently obtainable
     via relics which drop at least one of the three core components: Neuroptics, Systems, Chassis.
@@ -141,27 +141,17 @@ def get_available_warframe() -> List[str]:
         f"""
         SELECT price FROM relic_rewards
         WHERE relic IN ({qmarks})
-          AND (
-                LOWER(price) LIKE '% neuroptics blueprint'
-             OR LOWER(price) LIKE '% systems blueprint'
-             OR LOWER(price) LIKE '% chassis blueprint'
-          )
+            AND LOWER(price) LIKE '% prime %'
         """,
         tuple(available_relics)
     )
 
     # From e.g., "Wisp Prime Neuroptics" -> "Wisp Prime"
-    suffixes = [" neuroptics blueprint", " system blueprints", " chassis blueprint"]
+    suffixes = ["Prime"]
     names: set = set()
     for (price,) in rows:
-        p = price.strip()
-        pl = p.lower()
-        for s in suffixes:
-            if pl.endswith(s):
-                base = p[: -len(s)].strip()
-                if base:
-                    names.add(base)
-                break
+        if suffixes in price.strip():
+            names.add(f'{price.strip().split(suffixes)[0].strip()} Prime')
 
     return sorted(names)
 
@@ -308,6 +298,9 @@ def list_relics(era: Optional[str] = None,
 
 @app.get("/v1/relics/{relic_id}")
 def get_relic(relic_id: str) -> JSONResponse:
+    if 'Relic' not in relic_id:
+        relic_id = f'{relic_id} Relic'
+
     rows = fetchall(
         "SELECT price, radiant, rarity, drop_rate FROM relic_rewards WHERE relic = ? ORDER BY radiant",
         (relic_id,)
@@ -318,14 +311,11 @@ def get_relic(relic_id: str) -> JSONResponse:
     for price, radiant, rarity, drop_rate in rows:
         by_ref.setdefault(radiant, []).append({
             "item": price,
-            "rarity": rarity,
             "chance": float(drop_rate),
         })
     meta = split_relic_name(relic_id)
     return JSONResponse({
-        "id": relic_id,
-        "era": meta["era"],
-        "code": meta["code"],
+        "relic": relic_id,
         "rewards": by_ref,
     })
 

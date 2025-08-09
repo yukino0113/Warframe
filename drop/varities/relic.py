@@ -36,7 +36,7 @@ class UpdateRelicReward(BaseUpdater):
         return ['price', 'radiant', 'rarity', 'drop_rate', 'relic']
 
     def extract_values(self, reward: RelicReward) -> Tuple:
-        return (reward.price, reward.radiant, reward.rarity, reward.drop_rate, reward.relic)
+        return reward.price, reward.radiant, reward.rarity, reward.drop_rate, reward.relic
 
     def _parse_data(self) -> List[RelicReward]:
         """解析聖物獎勵資料"""
