@@ -2,16 +2,16 @@ from typing import List, Dict, Any
 from fastapi import HTTPException
 from fastapi.responses import JSONResponse
 
-from backend.API_main import app
+from API_main import app
 from backend.helper.helper_function import fetchall
 
 
-@app.get("/v1/relics/{relic_id}/where-to-get")
+@app.get("/v1/relics/source/{relic_id}")
 def get_relic_sources(relic_id: str) -> JSONResponse:
     results: List[Dict[str, Any]] = []
     # Missions
     rows = fetchall(
-        "SELECT source, rotation, drop_rate FROM mission_rewards WHERE price = ?",
+        "SELECT source, rotation, drop_rate FROM mission_rewards WHERE prize = ?",
         (relic_id,)
     )
     for source, rotation, drop_rate in rows:
@@ -25,7 +25,7 @@ def get_relic_sources(relic_id: str) -> JSONResponse:
         })
     # Bounties
     rows = fetchall(
-        "SELECT source, rotation, stage, drop_rate FROM bounty_rewards WHERE price = ?",
+        "SELECT source, rotation, stage, drop_rate FROM bounty_rewards WHERE prize = ?",
         (relic_id,)
     )
     for source, rotation, stage, drop_rate in rows:
@@ -39,7 +39,7 @@ def get_relic_sources(relic_id: str) -> JSONResponse:
         })
     # Dynamic locations
     rows = fetchall(
-        "SELECT source, rotation, drop_rate FROM dynamic_location_rewards WHERE price = ?",
+        "SELECT source, rotation, drop_rate FROM dynamic_location_rewards WHERE prize = ?",
         (relic_id,)
     )
     for source, rotation, drop_rate in rows:
