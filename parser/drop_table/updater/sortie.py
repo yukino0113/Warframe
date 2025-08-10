@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import List, Tuple
 
-from parser.drop_table.utils.commonParser import parse_two_cell_price, strip_text
+from parser.drop_table.utils.commonParser import parse_two_cell_prize, strip_text
 from parser.drop_table.utils.commonFunctions import is_empty_row
 from .base_updater import BaseUpdater
 
@@ -9,7 +9,7 @@ from .base_updater import BaseUpdater
 @dataclass
 class SortieReward:
     source: str
-    price: str
+    prize: str
     rarity: str
     drop_rate: float
 
@@ -22,7 +22,7 @@ class UpdateSortieReward(BaseUpdater):
     def get_table_schema(self) -> List[str]:
         return [
             'id INTEGER PRIMARY KEY AUTOINCREMENT',
-            'price TEXT NOT NULL',
+            'prize TEXT NOT NULL',
             'rarity TEXT NOT NULL',
             'drop_rate DECIMAL(5,4) NOT NULL',
             'source TEXT NOT NULL',
@@ -30,10 +30,10 @@ class UpdateSortieReward(BaseUpdater):
         ]
 
     def get_columns(self) -> List[str]:
-        return ['price', 'rarity', 'drop_rate', 'source']
+        return ['prize', 'rarity', 'drop_rate', 'source']
 
     def extract_values(self, reward: SortieReward) -> Tuple:
-        return reward.price, reward.rarity, reward.drop_rate, reward.source
+        return reward.prize, reward.rarity, reward.drop_rate, reward.source
 
     def _parse_data(self) -> List[SortieReward]:
         items: List[SortieReward] = []
@@ -45,10 +45,10 @@ class UpdateSortieReward(BaseUpdater):
                 text = strip_text(title)
                 source = text
             elif not is_empty_row(row):
-                price, rarity, drop_rate = parse_two_cell_price(row.find('td'))
+                prize, rarity, drop_rate = parse_two_cell_prize(row.find('td'))
                 items.append(SortieReward(
                     source=source,
-                    price=price,
+                    prize=prize,
                     rarity=rarity,
                     drop_rate=drop_rate
                 ))

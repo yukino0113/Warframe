@@ -3,7 +3,7 @@ from typing import List, Tuple
 
 from bs4.element import Tag
 
-from parser.drop_table.utils.commonParser import parse_three_cell_price, strip_text
+from parser.drop_table.utils.commonParser import parse_three_cell_prize, strip_text
 from parser.drop_table.utils.commonFunctions import is_empty_row
 from .base_updater import BaseUpdater
 
@@ -54,7 +54,7 @@ class GenericBySourceUpdater(BaseUpdater):
             if row.find('th'):
                 handle_header_row(row)
             elif not is_empty_row(row):
-                item, rarity, drop_rate = parse_three_cell_price(row.find('td'))
+                item, rarity, drop_rate = parse_three_cell_prize(row.find('td'))
                 items.append(BySourceReward(
                     source=current_source,
                     item=item,

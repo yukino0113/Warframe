@@ -88,10 +88,10 @@ def get_available_relics() -> set:
     """
     # Collect currently dropping relics from source tables
     relics_mission = {r[0] for r in
-                      fetchall("SELECT price FROM mission_rewards WHERE price LIKE '% %%' GROUP BY price")}
-    relics_bounty = {r[0] for r in fetchall("SELECT price FROM bounty_rewards WHERE price LIKE '% %%' GROUP BY price")}
+                      fetchall("SELECT prize FROM mission_rewards WHERE prize LIKE '% %%' GROUP BY prize")}
+    relics_bounty = {r[0] for r in fetchall("SELECT prize FROM bounty_rewards WHERE prize LIKE '% %%' GROUP BY prize")}
     relics_dynamic = {r[0] for r in
-                      fetchall("SELECT price FROM dynamic_location_rewards WHERE price LIKE '% %%' GROUP BY price")}
+                      fetchall("SELECT prize FROM dynamic_location_rewards WHERE prize LIKE '% %%' GROUP BY prize")}
     try:
         relics_by_source = {r[0] for r in fetchall("SELECT item FROM relic_drops_by_source GROUP BY item")}
     except Exception:
@@ -107,14 +107,14 @@ def get_available_relics() -> set:
     if available_candidates:
         qmarks = ",".join(["?"] * len(available_candidates))
         rows = fetchall(
-            f"SELECT relic, price FROM relic_rewards WHERE relic IN ({qmarks})",
+            f"SELECT relic, prize FROM relic_rewards WHERE relic IN ({qmarks})",
             tuple(available_candidates)
         )
         # For each relic, check if it has a warframe component reward not excluded
-        for relic_name, price in rows:
-            if is_excluded(price, exclude_words):
+        for relic_name, prize in rows:
+            if is_excluded(prize, exclude_words):
                 continue
-            if detect_type(price) == "warframe_component":
+            if detect_type(prize) == "warframe_component":
                 warframe_relics.add(relic_name)
 
     return available_candidates & warframe_relics
@@ -135,16 +135,16 @@ def get_available_prime() -> List[str]:
     qmarks = ",".join(["?"] * len(available_relics))
     rows = fetchall(
         f"""
-        SELECT price FROM relic_rewards
+        SELECT prize FROM relic_rewards
         WHERE relic IN ({qmarks})
-            AND LOWER(price) LIKE '% prime %'
+            AND LOWER(prize) LIKE '% prime %'
         """,
         tuple(available_relics)
     )
     suffixes = ["Prime"]
     names: set = set()
-    for (price,) in rows:
-        if suffixes in price.strip():
-            names.add(f'{price.strip().split(suffixes)[0].strip()} Prime')
+    for (prize,) in rows:
+        if suffixes in prize.strip():
+            names.add(f'{prize.strip().split(suffixes)[0].strip()} Prime')
 
     return sorted(names)

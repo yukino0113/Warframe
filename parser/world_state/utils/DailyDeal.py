@@ -9,8 +9,8 @@ class DailyDeal:
     amount_total: int
     discount: int
     expiry: int
-    original_price: int
-    sale_price: int
+    original_prize: int
+    sale_prize: int
     store_item: str
 
     @classmethod
@@ -21,7 +21,7 @@ class DailyDeal:
             amount_total=deal_json.get('AmountTotal', 0),
             discount=deal_json.get('Discount', 0),
             expiry=int(deal_json['Expiry']['$date']['$numberLong']),
-            original_price=deal_json.get('OriginalPrice', 0),
-            sale_price=deal_json.get('SalePrice', 0),
+            original_prize=deal_json.get('Originalprize', 0),
+            sale_prize=deal_json.get('Saleprize', 0),
             store_item=deal_json.get('StoreItem', '')
         )

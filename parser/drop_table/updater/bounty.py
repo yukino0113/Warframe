@@ -3,7 +3,7 @@ from typing import List, Tuple
 
 from bs4.element import Tag
 
-from parser.drop_table.utils.commonParser import parse_three_cell_price, strip_text
+from parser.drop_table.utils.commonParser import parse_three_cell_prize, strip_text
 from parser.drop_table.utils.commonFunctions import is_empty_row
 from .base_updater import BaseUpdater
 
@@ -13,7 +13,7 @@ class BountyReward:
     source: str  # e.g., "Level 5 - 15 Cetus Bounty"
     rotation: str  # e.g., "Rotation A"
     stage: str  # e.g., "Stage 1" or "Stage 2, Stage 3 of 4, and Stage 3 of 5"
-    price: str
+    prize: str
     rarity: str
     drop_rate: float
 
@@ -30,7 +30,7 @@ class UpdateBountyReward(BaseUpdater):
     def get_table_schema(self) -> List[str]:
         return [
             'id INTEGER PRIMARY KEY AUTOINCREMENT',
-            'price TEXT NOT NULL',
+            'prize TEXT NOT NULL',
             'rotation TEXT NOT NULL',
             'stage TEXT NOT NULL',
             'rarity TEXT NOT NULL',
@@ -40,10 +40,10 @@ class UpdateBountyReward(BaseUpdater):
         ]
 
     def get_columns(self) -> List[str]:
-        return ['price', 'rotation', 'stage', 'rarity', 'drop_rate', 'source']
+        return ['prize', 'rotation', 'stage', 'rarity', 'drop_rate', 'source']
 
     def extract_values(self, reward: BountyReward) -> Tuple:
-        return reward.price, reward.rotation, reward.stage, reward.rarity, reward.drop_rate, reward.source
+        return reward.prize, reward.rotation, reward.stage, reward.rarity, reward.drop_rate, reward.source
 
     def _parse_data(self) -> List[BountyReward]:
         items: List[BountyReward] = []
@@ -69,12 +69,12 @@ class UpdateBountyReward(BaseUpdater):
             if row.find('th'):
                 handle_header_row(row)
             elif not is_empty_row(row):
-                price, rarity, drop_rate = parse_three_cell_price(row.find('td'))
+                prize, rarity, drop_rate = parse_three_cell_prize(row.find('td'))
                 items.append(BountyReward(
                     source=source,
                     rotation=rotation,
                     stage=stage,
-                    price=price,
+                    prize=prize,
                     rarity=rarity,
                     drop_rate=drop_rate
                 ))
