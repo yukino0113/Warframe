@@ -6,6 +6,7 @@ app = FastAPI(title="Warframe Drop API", version="v1")
 
 from backend.item.search_item_source import *
 from backend.relic.search_relic_source import *
+from backend.prime.status import *
 
 
 if __name__ == "__main__":
