@@ -1,0 +1,125 @@
+{
+  "Warframe": [
+    "Blueprint",
+    "Chassis",
+    "Neuroptics",
+    "Systems"
+  ],
+  "Arch-gun": [
+    "Blueprint",
+    "Barrel",
+    "Receiver",
+    "Stock"
+  ],
+  "Companion": [
+    "Blueprint",
+    "Carapace",
+    "Cerebrum",
+    "Systems"
+  ],
+  "Archwing": [
+    "Blueprint",
+    "Harness",
+    "Systems",
+    "Wings"
+  ],
+  "Kavasa": [
+    "Band",
+    "Buckle",
+    "Kubrow Collar"
+  ],
+  "BBRS": [
+    "Blueprint",
+    "Barrel",
+    "Receiver",
+    "Stock"
+  ],
+  "BGLSU": [
+    "Blueprint",
+    "Grip",
+    "Lower Limb",
+    "String",
+    "Upper Limb"
+  ],
+  "BBBH": [
+    "Blueprint",
+    "Barrel",
+    "Blade",
+    "Handle"
+  ],
+  "BBGRS": [
+    "Blueprint",
+    "Barrel",
+    "Grip",
+    "Receiver",
+    "String"
+  ],
+  "BBLR": [
+    "Blueprint",
+    "Barrel",
+    "Link",
+    "Receiver"
+  ],
+  "BL": [
+    "Blueprint",
+    "Link"
+  ],
+  "BLRSU": [
+    "Blueprint",
+    "Lower Limb",
+    "Receiver",
+    "String",
+    "Upper Limb"
+  ],
+  "BBR": [
+    "Blueprint",
+    "Barrel",
+    "Receiver"
+  ],
+  "BPS": [
+    "Blueprint",
+    "Pouch",
+    "Stars"
+  ],
+  "BBP": [
+    "Blueprint",
+    "Blade",
+    "Pouch"
+  ],
+  "BBG": [
+    "Blueprint",
+    "Blades",
+    "Gauntlet"
+  ],
+  "BHO": [
+    "Blueprint",
+    "Handle",
+    "Ornament"
+  ],
+  "BBGH": [
+    "Blueprint",
+    "Blade",
+    "Guard",
+    "Hilt"
+  ],
+  "BBH": [
+    "Blueprint",
+    "Blade",
+    "Handle"
+  ],
+  "BHH": [
+    "Blueprint",
+    "Handle",
+    "Head"
+  ],
+  "BBD": [
+    "Blueprint",
+    "Blade",
+    "Disc"
+  ],
+  "BCH": [
+    "Blueprint",
+    "Chain",
+    "Handle"
+  ]
+}
