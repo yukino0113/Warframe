@@ -4,9 +4,10 @@ import utils.logger  # noqa: F401 - initialize logging formatting
 
 app = FastAPI(title="Warframe Drop API", version="v1")
 
-from backend.item.search_item_source import *
-from backend.relic.search_relic_source import *
-from backend.prime.status import *
+from backend.item.search_item_source import *  # noqa: F401
+from backend.relic.search_relic_source import *  # noqa: F401
+from backend.prime.status import *  # noqa: F401
+
 
 
 if __name__ == "__main__":
