@@ -18,13 +18,14 @@ def get_prime_status() -> JSONResponse:
         return mapping_json[text]
 
     mapping_json = json.load(open("backend/helper/components.json"))
-    rows = fetchall("SELECT name, type, component_type, vaulted FROM prime_set")
+    rows = fetchall("SELECT id, name, type, component_type, vaulted FROM prime_set")
     if not rows:
         raise HTTPException(status_code=404, detail="Item not found")
 
     result: List[Dict[str, Any]] = []
-    for name, type_, component_type, vaulted in rows:
+    for id_, name, type_, component_type, vaulted in rows:
         result.append({
+            "id": id_,
             "name": name + ' Prime',
             "type": type_,
             "component_type": components_mapping(component_type),
