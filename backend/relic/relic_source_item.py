@@ -1,12 +1,14 @@
 from typing import List, Dict, Any
-from fastapi import HTTPException
+
+from fastapi import HTTPException, APIRouter
 from fastapi.responses import JSONResponse
 
-from API_main import app
+router = APIRouter()
+
 from backend.helper.helper_function import fetchall
 
 
-@app.get("/v1/relics/source/{relic_id}")
+@router.get("/v1/relics/source/{relic_id}")
 def get_relic_sources(relic_id: str) -> JSONResponse:
     results: List[Dict[str, Any]] = []
     # Missions

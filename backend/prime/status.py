@@ -1,10 +1,11 @@
 import logging
 from typing import Dict, List, Any
 
-from fastapi import HTTPException
+from fastapi import HTTPException, APIRouter
 from fastapi.responses import JSONResponse
 
-from API_main import app
+router = APIRouter()
+
 from backend.helper.helper_function import fetchall
 
 
@@ -41,7 +42,7 @@ class PrimeStatusService:
         }
 
 
-@app.get("/v1/prime/status")
+@router.get("/v1/prime/status")
 def get_prime_status() -> JSONResponse:
     """
     Get all prime set data include：

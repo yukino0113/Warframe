@@ -16,21 +16,26 @@ frontend_path = "frontend/index.html"
 app.mount("/ui", StaticFiles(directory="frontend", html=True), name="ui")
 
 
-def include_all_routers(app: FastAPI, package_name: str, prefix: str = ""):
-    package = importlib.import_module(package_name)
-    for _, module_name, _ in pkgutil.iter_modules(package.__path__):
-        module = importlib.import_module(f"{package_name}.{module_name}")
-        if hasattr(module, "router"):
-            app.include_router(getattr(module, "router"), prefix=f"{prefix}/{module_name}")
+def include_all_routers(app: FastAPI, base_package: str, base_prefix: str = ""):
+    """Automatically include all routers in a package."""
+    package = importlib.import_module(base_package)
+    for _, module_name, is_pkg in pkgutil.iter_modules(package.__path__):
+        full_module_name = f"{base_package}.{module_name}"
+
+        # If the module is a package, recursively include its routers
+        if is_pkg:
+            include_all_routers(app, full_module_name, f"{base_prefix}/{module_name}")
+        else:
+            module = importlib.import_module(full_module_name)
+            if hasattr(module, "router"):
+                app.include_router(getattr(module, "router"), prefix=f"{base_prefix}/{module_name}")
 
 
-# 建立 FastAPI app
+# Create FastAPI app
 app = FastAPI()
 
-# 載入所有 routers
-include_all_routers(app, "backend.item", prefix="/item")
-include_all_routers(app, "backend.relic", prefix="/relic")
-include_all_routers(app, "backend.prime", prefix="/prime")
+# load all routers
+include_all_routers(app, "backend")
 
 
 # SPA fallback routes: serve frontend for root and any non-API path
