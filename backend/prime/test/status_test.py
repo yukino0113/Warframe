@@ -35,10 +35,10 @@ def get_prime_status_skips_sets_with_no_parts(monkeypatch):
 
 
 def get_prime_status_handles_server_error_gracefully(monkeypatch):
-    def raise_exception():
+    def raise_exception(*args, **kwargs):
         raise ConnectionError("Database error")
 
-    monkeypatch.setattr(attr, lambda query, params=None: raise_exception())
+    monkeypatch.setattr(attr, raise_exception)
     response = client.get(prime_status_url)
     assert response.status_code == 500
     assert response.json()["detail"] == "Server error while fetching Prime status data."

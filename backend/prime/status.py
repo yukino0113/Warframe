@@ -14,13 +14,13 @@ class PrimeStatusService:
     @staticmethod
     def get_vault_status() -> List[tuple]:
         """Fetch all Prime sets and their status from the vault_status table."""
-        return fetchall("SELECT warframe_set, status, set_type FROM vault_status")
+        return fetchall("SELECT warframe_set, status, set_type FROM vault_status ORDER BY warframe_set ")
 
     @staticmethod
     def get_prime_parts(warframe_set: str) -> List[tuple]:
         """Fetch all Prime parts for a given Prime set."""
         return fetchall(
-            "SELECT id, parts_name FROM prime_parts WHERE warframe_set = ?",
+            "SELECT id, parts_name FROM prime_parts WHERE warframe_set = ? ORDER BY parts_name ,id ",
             (warframe_set,)
         )
 
@@ -83,11 +83,10 @@ def get_prime_status() -> JSONResponse:
         if not result:
             raise HTTPException(status_code=404, detail="No Prime sets found in the database.")
 
-        return JSONResponse(content=result)
+        return JSONResponse(content=result, media_type="application/json")
 
     except HTTPException:
-        # Re-raise HTTP exceptions to be handled by FastAPI
         raise
     except Exception as e:
-        logging.error(f"ERROR: {str(e)}")
-        raise HTTPException(status_code=500, detail="Server error while fetching Prime status data.")
+        logging.error("ERROR while fetching Prime status data", exc_info=True)
+        raise HTTPException(status_code=500, detail="Server error while fetching Prime status data.") from e
