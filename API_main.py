@@ -20,10 +20,15 @@ def include_all_routers(app: FastAPI, base_package: str, base_prefix: str = ""):
     """Automatically include all routers in a package."""
     try:
         package = importlib.import_module(base_package)
-    except Exception:
+    except Exception as exc:
+        # Log and abort router discovery for this base package
+        import logging
+        logging.exception("Failed to import base package '%s': %s", base_package, exc)
         return
     pkg_path = getattr(package, "__path__", None)
     if not pkg_path:
+        import logging
+        logging.error("Package '%s' has no __path__; cannot iterate modules", base_package)
         return
     for _, module_name, is_pkg in pkgutil.iter_modules(pkg_path):
         full_module_name = f"{base_package}.{module_name}"
