@@ -1,12 +1,14 @@
 from typing import Dict, List, Any
-from fastapi.responses import JSONResponse
-from fastapi import HTTPException
 
-from API_main import app
+from fastapi import HTTPException, APIRouter
+from fastapi.responses import JSONResponse
+
+router = APIRouter()
+
 from backend.helper.helper_function import fetchall, split_relic_name
 
 
-@app.get("/v1/relics/prize/{relic_id}")
+@router.get("/v1/relics/prize/{relic_id}")
 def get_relic_prize(relic_id: str) -> JSONResponse:
     if 'Relic' not in relic_id:
         relic_id = f'{relic_id} Relic'
@@ -23,7 +25,9 @@ def get_relic_prize(relic_id: str) -> JSONResponse:
             "item": prize,
             "chance": float(drop_rate),
         })
-    meta = split_relic_name(relic_id)
+
+    split_relic_name(relic_id)
+
     return JSONResponse({
         "relic": relic_id,
         "rewards": by_ref,

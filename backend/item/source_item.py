@@ -1,12 +1,14 @@
 from typing import Dict, List, Any
-from fastapi.responses import JSONResponse
-from fastapi import HTTPException
 
-from API_main import app
+from fastapi import HTTPException, APIRouter
+from fastapi.responses import JSONResponse
+
+router = APIRouter()
+
 from backend.helper.helper_function import fetchall
 
 
-@app.get("/v1/items/source/{item_id}")
+@router.get("/v1/items/source/{item_id}")
 def get_item(item_id: str) -> JSONResponse:
     # item_id is the exact item name (URL-encoded)
     # Fetch relics that can drop_table this item, with refinement breakdown
