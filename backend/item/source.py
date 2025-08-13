@@ -8,7 +8,7 @@ router = APIRouter()
 from backend.helper.helper_function import fetchall
 
 
-@router.get("/v1/items/source/{item_id}")
+@router.get("/{item_id}")
 def get_item(item_id: str) -> JSONResponse:
     # item_id is the exact item name (URL-encoded)
     # Fetch relics that can drop_table this item, with refinement breakdown
