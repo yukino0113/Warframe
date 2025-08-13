@@ -18,21 +18,32 @@ app.mount("/ui", StaticFiles(directory="frontend", html=True), name="ui")
 
 def include_all_routers(app: FastAPI, base_package: str, base_prefix: str = ""):
     """Automatically include all routers in a package."""
-    package = importlib.import_module(base_package)
-    for _, module_name, is_pkg in pkgutil.iter_modules(package.__path__):
+    try:
+        package = importlib.import_module(base_package)
+    except Exception as exc:
+        # Log and abort router discovery for this base package
+        import logging
+        logging.exception("Failed to import base package '%s': %s", base_package, exc)
+        return
+    pkg_path = getattr(package, "__path__", None)
+    if not pkg_path:
+        import logging
+        logging.error("Package '%s' has no __path__; cannot iterate modules", base_package)
+        return
+    for _, module_name, is_pkg in pkgutil.iter_modules(pkg_path):
         full_module_name = f"{base_package}.{module_name}"
-
-        # If the module is a package, recursively include its routers
+        prefix = f"{base_prefix}/{module_name}".replace("//", "/")
         if is_pkg:
-            include_all_routers(app, full_module_name, f"{base_prefix}/{module_name}")
+            include_all_routers(app, full_module_name, prefix)
         else:
-            module = importlib.import_module(full_module_name)
-            if hasattr(module, "router"):
-                app.include_router(getattr(module, "router"), prefix=f"{base_prefix}/{module_name}")
+            try:
+                module = importlib.import_module(full_module_name)
+            except Exception:
+                continue
+            router = getattr(module, "router", None)
+            if router is not None:
+                app.include_router(router, prefix=prefix)
 
-
-# Create FastAPI app
-app = FastAPI()
 
 # load all routers
 include_all_routers(app, "backend")

@@ -5,7 +5,7 @@ from fastapi.responses import JSONResponse
 
 router = APIRouter()
 
-from backend.helper.helper_function import fetchall, split_relic_name
+from backend.helper.helper_function import fetchall
 
 
 @router.get("/v1/relics/prize/{relic_id}")
@@ -25,8 +25,6 @@ def get_relic_prize(relic_id: str) -> JSONResponse:
             "item": prize,
             "chance": float(drop_rate),
         })
-
-    split_relic_name(relic_id)
 
     return JSONResponse({
         "relic": relic_id,
