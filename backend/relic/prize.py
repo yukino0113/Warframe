@@ -8,7 +8,7 @@ router = APIRouter()
 from backend.helper.helper_function import fetchall
 
 
-@router.get("/v1/relics/prize/{relic_id}")
+@router.get("/{relic_id}")
 def get_relic_prize(relic_id: str) -> JSONResponse:
     if 'Relic' not in relic_id:
         relic_id = f'{relic_id} Relic'

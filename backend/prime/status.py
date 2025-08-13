@@ -42,7 +42,7 @@ class PrimeStatusService:
         }
 
 
-@router.get("/v1/prime/status")
+@router.get("")
 def get_prime_status() -> JSONResponse:
     """
     Get all prime set data include：
