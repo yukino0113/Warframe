@@ -45,4 +45,4 @@ def decode_data_returns_empty_list_for_empty_input():
 
 def decode_data_raises_error_for_invalid_format():
     response = client.post("/", json={"data": "X123"})
-    assert response.status_code == 422
+    assert response.status_code == 400
