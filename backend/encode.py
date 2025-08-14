@@ -19,6 +19,8 @@ class GetEncodeResponse(BaseModel):
 def encode_bitmap(int_arr: List[int]) -> str:
     if not int_arr:
         return ""
+    if any(num < 0 for num in int_arr):
+        raise ValueError("All numbers must be non-negative")
     max_val = max(int_arr)
     bit_len = max_val + 1
     byte_len = math.ceil(bit_len / 8)
