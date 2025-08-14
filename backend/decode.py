@@ -1,7 +1,7 @@
 import base64
 from typing import List
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 router = APIRouter()
@@ -41,4 +41,4 @@ def decode_data(req: GetDecodeRequest):
     elif req.data[0] == "L":
         return GetDecodeResponse(data=decode_list(req.data[1:]))
     else:
-        raise ValueError("Invalid format")
+        raise HTTPException(status_code=422, detail="Invalid format")
