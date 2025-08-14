@@ -41,4 +41,4 @@ def decode_data(req: GetDecodeRequest):
     elif req.data[0] == "L":
         return GetDecodeResponse(data=decode_list(req.data[1:]))
     else:
-        raise HTTPException(status_code=422, detail="Invalid format")
+        raise HTTPException(status_code=400, detail="Input invalid format")
