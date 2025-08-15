@@ -1,5 +1,6 @@
 import os
 from typing import Optional, List, Dict
+
 import dotenv
 
 dotenv.load_dotenv()
