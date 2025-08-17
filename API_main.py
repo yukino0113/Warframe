@@ -12,7 +12,7 @@ frontend_path = "frontend/index.html"
 
 
 def include_all_routers(app: FastAPI, base_package: str, base_prefix: str = ""):
-    """Automatically include all routers in a package."""
+    """Automatically include all routers in a package.  """
     package = importlib.import_module(base_package)
     for _, module_name, is_pkg in pkgutil.iter_modules(package.__path__):
         full_module_name = f"{base_package}.{module_name}"
