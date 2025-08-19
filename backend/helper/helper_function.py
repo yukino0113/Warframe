@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional, List, Any
 
 import dotenv
 
@@ -7,7 +7,7 @@ dotenv.load_dotenv()
 from database.WarframeDB import WarframeDB
 
 
-def fetchall(query: str, params: Optional[tuple] = None) -> List[tuple]:
+def fetchall(query: str, params: Optional[Any] = None) -> List[tuple]:
     db = WarframeDB()
     cur = db.cursor
     try:
