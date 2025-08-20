@@ -23,7 +23,7 @@ class DropSearchService:
 
     def __init__(self, item_int_arr: List[int]) -> None:
         self.item_int_arr = item_int_arr
-        self.process_search()
+        #self.process_search()
 
     def process_search(self):
         # Step 1: Turn the item list (int) to an item list (str)
@@ -67,10 +67,11 @@ class DropSearchService:
             value is a list of named tuples (relic: str, radiant: str, drop_rate: float)
             containing details about associated relics and their respective drop rates.
         """
+        query_result = fetchall(f'SELECT prize, radiant, drop_rate, relic FROM relic_rewards WHERE prize IN ({make_question_string(lst)})', lst)
         ItemDropRate = namedtuple('ItemDropRate', ['relic', 'radiant', 'drop_rate'])
         item_drop = defaultdict(list)
 
-        for prize, radiant, drop_rate, relic in lst:
+        for prize, radiant, drop_rate, relic in query_result:
             reward = ItemDropRate(relic, radiant, drop_rate)
 
             existing_relics = [r.relic for r in item_drop[prize]]
