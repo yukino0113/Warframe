@@ -134,7 +134,7 @@ class DropSearchService:
         return relic_list
 
     @staticmethod
-    def get_area_drop_score(item_score_list: dict) -> dict:
+    def get_area_score_list(item_score_list: dict) -> dict:
         """
         Calculates and returns a dictionary mapping source areas to their respective drop
         scores and categorized rotation details based on relic drop rates.
