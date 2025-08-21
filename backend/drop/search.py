@@ -100,7 +100,7 @@ class DropSearchService:
 
     @staticmethod
     def search_relic_drop():
-        # WIP
+        # W I P
         pass
 
 
