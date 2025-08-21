@@ -228,7 +228,7 @@ class VaultStatus(Base):
     __tablename__ = "vault_status"
 
     warframe_set: Mapped[str] = mapped_column(Text, nullable=False)
-    status: Mapped[str] = mapped_column(Text, nullable=False)
+    vaulted: Mapped[str] = mapped_column(Text, nullable=False)
     set_type: Mapped[str] = mapped_column(Text, nullable=False)
     id: Mapped[Optional[int]] = mapped_column(Integer, primary_key=True)
 
