@@ -14,7 +14,7 @@ T = TypeVar("T")
 def get_available_sets() -> list[str]:
     return [
         x[0]
-        for x in fetchall('SELECT warframe_set FROM vault_status WHERE status = "1"')
+        for x in fetchall('SELECT warframe_set FROM vault_status WHERE valuted = "0"')
     ]
 
 
@@ -34,7 +34,8 @@ class DropSearchService:
         item_arr = self.get_set_list(self.item_int_arr)
         # Step 2: Search item drop
         self.search_item_drop(item_arr)
-        # Step 3: Search relic drop
+        # Step 3: Get relics score
+
         # Step 4: Return result
 
     @staticmethod
@@ -84,7 +85,6 @@ class DropSearchService:
 
         for prize, radiant, drop_rate, relic in query_result:
             reward = ItemDropRate(relic, radiant, drop_rate)
-
             existing_relics = [r.relic for r in item_drop[prize]]
             if relic not in existing_relics:
                 item_drop[prize].append(reward)
@@ -97,6 +97,30 @@ class DropSearchService:
                         item_drop[prize][i] = reward
                         break
         return dict(item_drop)
+
+    @staticmethod
+    def get_relic_score_list(item_drop_list: dict):
+        """
+        Processes a list of item drops to calculate and organize relic scores and their associated
+        item list. Each item drop rate is used to increment the score of its corresponding relic,
+        grouping items by their relics in a structured dictionary.
+
+        :param item_drop_list: A dictionary representing item drops where keys are item names
+            and values are lists of drop rate objects.
+        :return: A dictionary containing relic names as keys. Each relic key has a value of another
+            dictionary that includes a 'score' field for the relic's accumulated score, and an
+            'item_list' field with the corresponding items.
+        """
+        relic_list = {}
+        for item_name, drop_rates in item_drop_list.items():
+            for drop_rate in drop_rates:
+                relic_name = drop_rate.relic
+                if relic_name not in relic_list:
+                    relic_list[relic_name] = {"score": 0, "item_list": []}
+                relic_list[relic_name]["score"] += drop_rate.drop_rate
+                relic_list[relic_name]["item_list"].append(drop_rate)
+
+        return relic_list
 
     @staticmethod
     def search_relic_drop():
