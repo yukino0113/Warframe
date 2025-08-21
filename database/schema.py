@@ -242,5 +242,4 @@ class RewardTables:
         DynamicLocationRewards,
         KeyRewards,
         MissionRewards,
-        SortieRewards,
     ]

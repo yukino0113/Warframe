@@ -4,6 +4,8 @@ from typing import List, Iterable, TypeVar
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
+from database.schema import RewardTables
+
 router = APIRouter()
 
 from backend.helper.helper_function import fetchall
@@ -31,12 +33,13 @@ class DropSearchService:
 
     def process_search(self):
         # Step 1: Turn the item list (int) to an item list (str)
-        item_arr = self.get_set_list(self.item_int_arr)
+        item_list = self.get_set_list(self.item_int_arr)
         # Step 2: Search item drop
-        self.search_item_drop(item_arr)
+        relic_list = self.search_item_drop(item_list)
         # Step 3: Get relics score
-
-        # Step 4: Return result
+        self.get_relic_score_list(relic_list)
+        # Step 4: Get relic drops
+        # Step 5: Organize data
 
     @staticmethod
     def get_set_list(lst: List[int]) -> list[str]:
@@ -49,13 +52,21 @@ class DropSearchService:
         :return: A list of formatted strings combining valid part names.
         :rtype: list[str]
         """
+
         place_holder = make_question_string(lst)
         query = f"SELECT warframe_set, parts_name FROM prime_parts WHERE id IN ({place_holder})"
-        return [
-            " Prime ".join(x)
-            for x in fetchall(query, lst)
-            if x[0] in get_available_sets()
+        result = [x for x in fetchall(query, lst) if x[0] in get_available_sets()]
+
+        stringify = [
+            (
+                f"{x[0]} Prime {x[1]} Blueprint"
+                if x[1] in ["Chassis", "Neuroptics", "Systems"]
+                else f"{x[0]} Prime {x[1]}"
+            )
+            for x in result
         ]
+
+        return stringify
 
     @staticmethod
     def search_item_drop(lst: List[str]) -> dict:
@@ -118,14 +129,40 @@ class DropSearchService:
                 if relic_name not in relic_list:
                     relic_list[relic_name] = {"score": 0, "item_list": []}
                 relic_list[relic_name]["score"] += drop_rate.drop_rate
-                relic_list[relic_name]["item_list"].append(drop_rate)
+                relic_list[relic_name]["item_list"].append(item_name)
 
         return relic_list
 
     @staticmethod
-    def search_relic_drop():
-        # W I P
-        pass
+    def get_area_drop_score(item_score_list: dict) -> dict:
+        """
+        Calculates and returns a dictionary mapping source areas to their respective drop
+        scores and categorized rotation details based on relic drop rates.
+
+        :param item_score_list: A dictionary where keys are item names and values are their scores.
+        :type item_score_list: dict
+        :return: A dictionary mapping each source area to its cumulative drop score and detailed
+                 rotation-related information, including scores and lists of relics per rotation.
+        :rtype: dict
+        """
+        area_list = {}
+        for table in RewardTables.TABLES:
+            relics = list(item_score_list.keys())
+            query = f"SELECT prize, drop_rate, source, rotation FROM {table.__tablename__} WHERE prize IN ({make_question_string(relics)})"
+            for prize, drop_rate, source, rotation in fetchall(query, relics):
+                if source not in area_list:
+                    area_list[source] = {
+                        "score": 0,
+                        "A": {"score": 0, "relic_list": []},
+                        "B": {"score": 0, "relic_list": []},
+                        "C": {"score": 0, "relic_list": []},
+                    }
+
+                rotations = rotation.split(" ")[-1]
+                area_list[source]["score"] += drop_rate
+                area_list[source][rotations]["score"] += drop_rate
+                area_list[source][rotations]["relic_list"].append(prize)
+        return area_list
 
 
 @router.get("")
