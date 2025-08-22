@@ -25,11 +25,24 @@ def make_question_string(l: Iterable[T]) -> str:
 
 
 class DropSearchService:
-    """"""
+    """
+    Handles operations related to searching and scoring item drops, including fetching
+    data from external sources, organizing drop information, and calculating scores
+    for relics and source areas.
+
+    This class is designed for processing item drop data in a structured and efficient
+    manner. It provides methods to convert item data into specific formats, search for
+    item drops, calculate relic scores based on drop rates, and aggregate area-based
+    drop scores. The functionality is encapsulated into steps for easier adjustment
+    and extension.
+
+    :ivar item_int_arr: A list of integers representing the item IDs to process.
+    :type item_int_arr: List[int]
+    """
 
     def __init__(self, item_int_arr: List[int]) -> None:
         self.item_int_arr = item_int_arr
-        # self.process_search()
+        self.process_search()
 
     def process_search(self):
         # Step 1: Turn the item list (int) to an item list (str)
@@ -37,9 +50,14 @@ class DropSearchService:
         # Step 2: Search item drop
         relic_list = self.search_item_drop(item_list)
         # Step 3: Get relics score
-        self.get_relic_score_list(relic_list)
+        relic_score_list = self.get_relic_score_list(relic_list)
         # Step 4: Get relic drops
+        area_score_list = self.get_area_score_list(relic_score_list)
         # Step 5: Organize data
+        return {
+            'relic_score': relic_score_list,
+            'area_score': area_score_list
+        }
 
     @staticmethod
     def get_set_list(lst: List[int]) -> list[str]:
@@ -167,6 +185,9 @@ class DropSearchService:
 
 @router.get("")
 async def search_drop(lst: List[int]) -> JSONResponse:
-    return JSONResponse(
-        DropSearchService(lst).process_search()
-    )  # Temp return value for preventing warning
+    try:
+        return JSONResponse(
+            DropSearchService(lst).process_search()
+        )
+    except Exception as e:
+        return JSONResponse({"error": str(e)})
