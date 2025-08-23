@@ -54,10 +54,7 @@ class DropSearchService:
         # Step 4: Get relic drops
         area_score_list = self.get_area_score_list(relic_score_list)
         # Step 5: Organize data
-        return {
-            'relic_score': relic_score_list,
-            'area_score': area_score_list
-        }
+        return {"relic_score": relic_score_list, "area_score": area_score_list}
 
     @staticmethod
     def get_set_list(lst: List[int]) -> list[str]:
@@ -160,7 +157,7 @@ class DropSearchService:
         :param item_score_list: A dictionary where keys are item names and values are their scores.
         :type item_score_list: dict
         :return: A dictionary mapping each source area to its cumulative drop score and detailed
-                 rotation-related information, including scores and lists of relics per rotation.
+                 rotation-related information, including scores and lists of relic per rotation.
         :rtype: dict
         """
         area_list = {}
@@ -186,8 +183,6 @@ class DropSearchService:
 @router.get("")
 async def search_drop(lst: List[int]) -> JSONResponse:
     try:
-        return JSONResponse(
-            DropSearchService(lst).process_search()
-        )
+        return JSONResponse(DropSearchService(lst).process_search())
     except Exception as e:
         return JSONResponse({"error": str(e)})
