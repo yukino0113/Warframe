@@ -157,7 +157,7 @@ class DropSearchService:
         :param item_score_list: A dictionary where keys are item names and values are their scores.
         :type item_score_list: dict
         :return: A dictionary mapping each source area to its cumulative drop score and detailed
-                 rotation-related information, including scores and lists of relic per rotation.
+                 rotation-related information, including scores and lists of relics per rotation.
         :rtype: dict
         """
         area_list = {}
