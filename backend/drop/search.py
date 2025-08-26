@@ -1,8 +1,9 @@
 from collections import defaultdict, namedtuple
 from typing import List, Iterable, TypeVar
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
+from pydantic import BaseModel
 
 from database.schema import RewardTables
 
@@ -180,9 +181,14 @@ class DropSearchService:
         return area_list
 
 
-@router.get("")
-async def search_drop(lst: List[int]) -> JSONResponse:
+class SearchRequest(BaseModel):
+    data: List[int]
+
+
+@router.post("")
+async def search_drop(request: SearchRequest) -> JSONResponse:
+
     try:
-        return JSONResponse(DropSearchService(lst).process_search())
+        return JSONResponse(DropSearchService(request.data).process_search())
     except Exception as e:
-        return JSONResponse({"error": str(e)})
+        raise HTTPException(status_code=400, detail=str(e))
