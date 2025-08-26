@@ -43,7 +43,6 @@ class DropSearchService:
 
     def __init__(self, item_int_arr: List[int]) -> None:
         self.item_int_arr = item_int_arr
-        self.process_search()
 
     def process_search(self):
         # Step 1: Turn the item list (int) to an item list (str)
