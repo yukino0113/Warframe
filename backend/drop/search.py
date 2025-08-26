@@ -17,7 +17,7 @@ T = TypeVar("T")
 def get_available_sets() -> list[str]:
     return [
         x[0]
-        for x in fetchall('SELECT warframe_set FROM vault_status WHERE valuted = "0"')
+        for x in fetchall('SELECT warframe_set FROM vault_status WHERE vaulted = "0"')
     ]
 
 
