@@ -1,44 +1,74 @@
+import pytest
 from fastapi.testclient import TestClient
 
 from API_main import app
 
 client = TestClient(app)
-prime_status_url = "/v1/prime/status"
-attr = "backend.helper.helper_function.fetchall"
 
 
-def get_prime_status_returns_data_when_vault_has_sets():
-    response = client.get(prime_status_url)
-    assert response.status_code == 200
-    assert isinstance(response.json(), list)
-    assert len(response.json()) > 0
-    for prime_set in response.json():
-        assert "warframe_set" in prime_set
-        assert "status" in prime_set
-        assert "type" in prime_set
-        assert "parts" in prime_set
-        assert isinstance(prime_set["parts"], list)
+class TestPrimeStatusAPI:
+    prime_status_url = "/prime/status"
+    fetchall_attr = "backend.prime.status.fetchall"
 
+    mock_vault_status = [("Set1", "Available", "Warframe"), ("Set2", "Vaulted", "Weapon")]
+    mock_parts_data = {
+        "Set1": [(1, "PartA"), (2, "PartB")],
+        "Set2": [(3, "PartC")]
+    }
 
-def get_prime_status_returns_404_when_no_sets_in_vault(monkeypatch):
-    monkeypatch.setattr(attr, lambda query: [])
-    response = client.get(prime_status_url)
-    assert response.status_code == 404
-    assert response.json()["detail"] == "No Prime sets found in the vault status"
+    def test_get_prime_status_returns_data_successfully(self, monkeypatch):
+        def mock_fetchall(query, params=None):
+            if "vault_status" in query:
+                return self.mock_vault_status
+            if "prime_parts" in query:
+                warframe_set = params[0]
+                return self.mock_parts_data.get(warframe_set, [])
+            return []
 
+        monkeypatch.setattr(self.fetchall_attr, mock_fetchall)
+        response = client.get(self.prime_status_url)
 
-def get_prime_status_skips_sets_with_no_parts(monkeypatch):
-    monkeypatch.setattr(attr, lambda query, params=None: [])
-    response = client.get(prime_status_url)
-    assert response.status_code == 404
-    assert response.json()["detail"] == "No Prime sets found in the database."
+        assert response.status_code == 200
+        data = response.json()
+        assert isinstance(data, list)
+        assert len(data) == 2
 
+        assert data[0]["warframe_set"] == "Set1"
+        assert data[0]["status"] == "Available"
+        assert data[0]["type"] == "Warframe"
+        assert len(data[0]["parts"]) == 2
+        assert data[0]["parts"][0] == {"parts": "PartA", "id": 1}
 
-def get_prime_status_handles_server_error_gracefully(monkeypatch):
-    def raise_exception(*args, **kwargs):
-        raise ConnectionError("Database error")
+        assert data[1]["warframe_set"] == "Set2"
+        assert data[1]["status"] == "Vaulted"
+        assert data[1]["type"] == "Weapon"
+        assert len(data[1]["parts"]) == 1
+        assert data[1]["parts"][0] == {"parts": "PartC", "id": 3}
 
-    monkeypatch.setattr(attr, raise_exception)
-    response = client.get(prime_status_url)
-    assert response.status_code == 500
-    assert response.json()["detail"] == "Server error while fetching Prime status data."
+    def test_get_prime_status_returns_404_when_no_sets_in_vault(self, monkeypatch):
+        monkeypatch.setattr(self.fetchall_attr, lambda *args, **kwargs: [])
+        response = client.get(self.prime_status_url)
+        assert response.status_code == 404
+        assert response.json()["detail"] == "No Prime sets found in the vault status"
+
+    def test_get_prime_status_404_when_all_sets_have_no_parts(self, monkeypatch):
+        def mock_fetchall(query, params=None):
+            if "vault_status" in query:
+                return self.mock_vault_status
+            if "prime_parts" in query:
+                return [] # No parts for any set
+            return []
+
+        monkeypatch.setattr(self.fetchall_attr, mock_fetchall)
+        response = client.get(self.prime_status_url)
+        assert response.status_code == 404
+        assert response.json()["detail"] == "No Prime sets found in the database."
+
+    def test_get_prime_status_handles_server_error(self, monkeypatch):
+        def raise_exception(*args, **kwargs):
+            raise ConnectionError("Database error")
+
+        monkeypatch.setattr(self.fetchall_attr, raise_exception)
+        response = client.get(self.prime_status_url)
+        assert response.status_code == 500
+        assert response.json()["detail"] == "Server error while fetching Prime status data."

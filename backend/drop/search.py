@@ -45,23 +45,23 @@ class DropSearchService:
         self.item_int_arr = item_int_arr
 
     def process_search(self):
-        def process_search(self):
-            # Empty input guard
-            if not self.item_int_arr:
-                return {"relic_score": {}, "area_score": {}}
-            # Step 1: Turn the item list (int) to an item list (str)
-            item_list = self.get_set_list(self.item_int_arr)
-            if not item_list:
-                return {"relic_score": {}, "area_score": {}}
-            # Step 2: Search item drop
-            relic_list = self.search_item_drop(item_list)
-            if not relic_list:
-                return {"relic_score": {}, "area_score": {}}
-            # Step 3: Get relics score
-            relic_score_list = self.get_relic_score_list(relic_list)
-            if not relic_score_list:
-                return {"relic_score": {}, "area_score": {}}
-            # Step 4: Get relic drops
+        # Empty input guard
+        if not self.item_int_arr:
+            return {"relic_score": {}, "area_score": {}}
+        # Step 1: Turn the item list (int) to an item list (str)
+        item_list = self.get_set_list(self.item_int_arr)
+        if not item_list:
+            return {"relic_score": {}, "area_score": {}}
+        # Step 2: Search item drop
+        relic_list = self.search_item_drop(item_list)
+        if not relic_list:
+            return {"relic_score": {}, "area_score": {}}
+        # Step 3: Get relics score
+        relic_score_list = self.get_relic_score_list(relic_list)
+        if not relic_score_list:
+            return {"relic_score": {}, "area_score": {}}
+        # Step 4: Get relic drops
+        area_score_list = self.get_area_score_list(relic_score_list)
         # Step 5: Organize data
         return {"relic_score": relic_score_list, "area_score": area_score_list}
 
