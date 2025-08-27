@@ -46,7 +46,7 @@ class TestDropSearchAPI:
         assert "area_score" in data
 
         assert "Relic1" in data["relic_score"]
-        assert data["relic_score"]["Relic1"]["score"] == 0.1
+        assert data["relic_score"]["Relic1"]["score"] == pytest.approx(0.1)
         assert "Set1 Prime PartA" in data["relic_score"]["Relic1"]["item_list"]
 
         assert "Source1" in data["area_score"]
@@ -75,4 +75,4 @@ class TestDropSearchAPI:
         monkeypatch.setattr(self.get_available_sets_attr, lambda: ["Set1"])
 
         response = client.post(self.search_url, json={"data": [1]})
-        assert response.status_code == 400 # The API returns 400 for any exception
+        assert response.status_code == 400  # The API returns 400 for any exception
