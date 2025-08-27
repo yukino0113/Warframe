@@ -1,10 +1,11 @@
-import pytest
 from fastapi.testclient import TestClient
 
 from API_main import app
 from backend.decode import decode_bitmap, decode_list
 
 client = TestClient(app)
+
+decode_path = "/decode"
 
 
 class TestDecodeFunctions:
@@ -30,20 +31,20 @@ class TestDecodeAPI:
     def test_decode_data_returns_decoded_bitmap_for_bitmap_input(self):
         # The API receives "BQA", strips the "B" and decodes "QA".
         # "QA" is decoded from base64 to `b'@'` (64), which has only bit 6 set.
-        response = client.post("/decode", json={"data": "BQA"})
+        response = client.post(decode_path, json={"data": "BQA"})
         assert response.status_code == 200
         assert response.json()["data"] == [6]
 
     def test_decode_data_returns_decoded_list_for_list_input(self):
-        response = client.post("/decode", json={"data": "LMSwyLDM"})
+        response = client.post(decode_path, json={"data": "LMSwyLDM"})
         assert response.status_code == 200
         assert response.json()["data"] == [1, 2, 3]
 
     def test_decode_data_returns_empty_list_for_empty_input(self):
-        response = client.post("/decode", json={"data": ""})
+        response = client.post(decode_path, json={"data": ""})
         assert response.status_code == 200
         assert response.json()["data"] == []
 
     def test_decode_data_raises_error_for_invalid_format(self):
-        response = client.post("/decode", json={"data": "X123"})
+        response = client.post(decode_path, json={"data": "X123"})
         assert response.status_code == 400

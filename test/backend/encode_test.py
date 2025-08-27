@@ -1,10 +1,11 @@
-import pytest
 from fastapi.testclient import TestClient
 
 from API_main import app
 from backend.encode import encode_bitmap, encode_list
 
 client = TestClient(app)
+
+encode_path = "/encode"
 
 
 class TestEncodeFunctions:
@@ -29,7 +30,7 @@ class TestEncodeFunctions:
 class TestEncodeAPI:
     def test_encode_data_returns_bitmap_when_shorter(self):
         # bitmap: "BDg" (len 3), list: "LMSwyLDM" (len 8). Bitmap is shorter.
-        response = client.post("/encode", json={"data": [1, 2, 3]})
+        response = client.post(encode_path, json={"data": [1, 2, 3]})
         assert response.status_code == 200
         assert response.json()["data"] == "BDg"
 
@@ -37,11 +38,11 @@ class TestEncodeAPI:
         # For a sparse list, list encoding is shorter.
         # encode_list([1000]) -> "LMTAwMA" (len 7)
         # encode_bitmap([1000]) -> is much longer.
-        response = client.post("/encode", json={"data": [1000]})
+        response = client.post(encode_path, json={"data": [1000]})
         assert response.status_code == 200
         assert response.json()["data"] == "LMTAwMA"
 
     def test_encode_data_returns_empty_string_for_empty_list(self):
-        response = client.post("/encode", json={"data": []})
+        response = client.post(encode_path, json={"data": []})
         assert response.status_code == 200
         assert response.json()["data"] == ""
