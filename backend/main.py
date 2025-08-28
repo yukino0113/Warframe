@@ -3,8 +3,6 @@ import os
 import pkgutil
 
 from fastapi import FastAPI
-from fastapi.responses import FileResponse
-from fastapi.staticfiles import StaticFiles
 
 import utils.logger  # noqa: F401 - initialize logging formatting
 
@@ -32,15 +30,6 @@ app = FastAPI(title="Warframe Drop API", version="v1")
 
 # load all routers
 include_all_routers(app, "backend")
-
-# Mount static frontend at /ui
-app.mount("/ui", StaticFiles(directory="frontend", html=True), name="ui")
-
-
-# SPA fallback routes: serve frontend for root and any non-API path
-@app.get("/")
-async def index():
-    return FileResponse(frontend_path)
 
 
 if __name__ == "__main__":
