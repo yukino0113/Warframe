@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 
-from API_main import app
 from backend.encode import encode_bitmap, encode_list
+from backend.main import app
 
 client = TestClient(app)
 

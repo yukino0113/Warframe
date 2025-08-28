@@ -1,7 +1,6 @@
-import pytest
 from fastapi.testclient import TestClient
 
-from API_main import app
+from backend.main import app
 
 client = TestClient(app)
 
@@ -10,11 +9,11 @@ class TestPrimeStatusAPI:
     prime_status_url = "/prime/status"
     fetchall_attr = "backend.prime.status.fetchall"
 
-    mock_vault_status = [("Set1", "Available", "Warframe"), ("Set2", "Vaulted", "Weapon")]
-    mock_parts_data = {
-        "Set1": [(1, "PartA"), (2, "PartB")],
-        "Set2": [(3, "PartC")]
-    }
+    mock_vault_status = [
+        ("Set1", "Available", "Warframe"),
+        ("Set2", "Vaulted", "Weapon"),
+    ]
+    mock_parts_data = {"Set1": [(1, "PartA"), (2, "PartB")], "Set2": [(3, "PartC")]}
 
     def test_get_prime_status_returns_data_successfully(self, monkeypatch):
         def mock_fetchall(query, params=None):
@@ -56,7 +55,7 @@ class TestPrimeStatusAPI:
             if "vault_status" in query:
                 return self.mock_vault_status
             if "prime_parts" in query:
-                return [] # No parts for any set
+                return []  # No parts for any set
             return []
 
         monkeypatch.setattr(self.fetchall_attr, mock_fetchall)
@@ -71,4 +70,7 @@ class TestPrimeStatusAPI:
         monkeypatch.setattr(self.fetchall_attr, raise_exception)
         response = client.get(self.prime_status_url)
         assert response.status_code == 500
-        assert response.json()["detail"] == "Server error while fetching Prime status data."
+        assert (
+            response.json()["detail"]
+            == "Server error while fetching Prime status data."
+        )

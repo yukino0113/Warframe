@@ -8,7 +8,7 @@ from fastapi.staticfiles import StaticFiles
 
 import utils.logger  # noqa: F401 - initialize logging formatting
 
-frontend_path = "index.html"
+frontend_path = "../index.html"
 
 
 def include_all_routers(app: FastAPI, base_package: str, base_prefix: str = ""):
