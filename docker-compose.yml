@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  api:
+    build: .
+    container_name: warframe
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app/backend
+    environment:
+      - DATABASE_URL=sqlite:///app/backend/warframe.db
+    command: uvicorn backend.main:app --host 0.0.0.0 --port 8000
+
+  # Optional: local SQLite (mounted into container)
+  db:
+    image: nouchka/sqlite3
+    container_name: warframe-sqlite
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./backend/warframe.db:/root/warframe.db
