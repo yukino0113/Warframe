@@ -4,18 +4,13 @@ import dotenv
 
 dotenv.load_dotenv()
 
-from database.WarframeDB import WarframeDB
+from database.db_router import select
 
 
 def fetchall(query: str, params: Optional[Any] = None) -> List[tuple]:
-    db = WarframeDB()
-    cur = db.cursor
-    try:
-        if params:
-            cur.execute(query, params)
-        else:
-            cur.execute(query)
-        rows = cur.fetchall()
-    finally:
-        db.conn.close()
-    return rows
+    # Normalize params for D1 compatibility; keep signature stable
+    if params is None:
+        return select(query)
+    if not isinstance(params, (list, tuple)):
+        params = [params]
+    return select(query, list(params))
