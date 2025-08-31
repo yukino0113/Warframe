@@ -25,18 +25,24 @@ class PrimeStatusService:
 
     @staticmethod
     def get_joined_rows() -> List[tuple]:
-        """Fetch all sets and their parts in a single JOIN query."""
-        return fetchall(
-            (
-                """
-                SELECT vs.warframe_set, vs.vaulted, vs.set_type,
-                       pp.id AS part_id, pp.parts_name
-                FROM vault_status vs
-                LEFT JOIN prime_parts pp ON pp.warframe_set = vs.warframe_set
-                ORDER BY vs.warframe_set, pp.parts_name, pp.id
-                """
+        """Fetch all sets and their parts in a single JOIN query.
+        Be defensive: if DB/tables are unavailable, return an empty list.
+        """
+        try:
+            return fetchall(
+                (
+                    """
+                    SELECT vs.warframe_set, vs.vaulted, vs.set_type,
+                           pp.id AS part_id, pp.parts_name
+                    FROM vault_status vs
+                    LEFT JOIN prime_parts pp ON pp.warframe_set = vs.warframe_set
+                    ORDER BY vs.warframe_set, pp.parts_name, pp.id
+                    """
+                )
             )
-        )
+        except Exception:
+            logging.warning("JOIN query failed; returning empty result (likely missing DB/tables)", exc_info=True)
+            return []
 
     @staticmethod
     def build_payload(joined_rows: List[tuple]) -> List[Dict[str, Any]]:
@@ -99,16 +105,19 @@ def get_prime_status() -> JSONResponse:
         # Cache miss: fetch via JOIN and rebuild
         service = PrimeStatusService()
         rows = service.get_joined_rows()
+
+        # If DB/tables missing or no data, serve empty list with 200
         if not rows:
-            raise HTTPException(
-                status_code=404, detail="No Prime sets found in the database."
-            )
+            payload: List[Dict[str, Any]] = []
+            _CACHE["payload"] = payload
+            _CACHE["last_update"] = db_last
+            _CACHE["ts"] = now
+            return JSONResponse(content=payload, media_type="application/json")
 
         payload = service.build_payload(rows)
         if not payload:
-            raise HTTPException(
-                status_code=404, detail="No Prime sets found in the database."
-            )
+            # No parts found; return empty list rather than error to keep API stable
+            payload = []
 
         # Update cache
         _CACHE["payload"] = payload

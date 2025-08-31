@@ -3,6 +3,7 @@ import os
 import pkgutil
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 import utils.logger  # noqa: F401 - initialize logging formatting
 
@@ -27,6 +28,27 @@ def include_all_routers(app: FastAPI, base_package: str, base_prefix: str = ""):
 
 
 app = FastAPI(title="Warframe Drop API", version="v1")
+
+# CORS configuration: allow GitHub Pages frontend and local development
+_default_origins = [
+    "https://yukino0113.github.io",
+    "https://yukino0113.github.io/",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+_env_origins = os.getenv("CORS_ORIGINS")
+allow_origins = (
+    [o.strip() for o in _env_origins.split(",") if o.strip()]
+    if _env_origins
+    else _default_origins
+)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allow_origins,
+    allow_credentials=False,
+    allow_methods=["GET", "POST"],
+    allow_headers=["*"],
+)
 
 # load all routers
 include_all_routers(app, "backend")
