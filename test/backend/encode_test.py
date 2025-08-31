@@ -37,7 +37,7 @@ class TestEncodeAPI:
     def test_encode_data_returns_list_when_shorter(self):
         # For a sparse list, list encoding is shorter.
         # encode_list([1000]) -> "LMTAwMA" (len 7)
-        # encode_bitmap([1000]) -> is much longer.
+        # encode_bitmap([1000]) -> is much more longer.
         response = client.post(encode_path, json={"data": [1000]})
         assert response.status_code == 200
         assert response.json()["data"] == "LMTAwMA"
