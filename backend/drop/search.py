@@ -68,7 +68,7 @@ class DropSearchService:
     @staticmethod
     def get_set_list(lst: List[int]) -> list[str]:
         """
-        Generates a list of strings of part names
+        Generates a list of part names
         from a database query based on the given list of IDs.
 
         :param lst: A list of integers representing the IDs to be used in the query.
