@@ -144,7 +144,7 @@ class DropSearchService:
             and values are lists of drop rate objects.
         :return: A dictionary containing relic names as keys. Each relic key has a value of another
             dictionary that includes a 'score' field for the relic's accumulated score, and an
-            'item_list' field with some corresponding items. (need remodel)
+            'item_list' field with some corresponding items. (need remodel) 1
         """
         relic_list = {}
         for item_name, drop_rates in item_drop_list.items():
