@@ -1,9 +1,13 @@
 import importlib
 import os
 import pkgutil
+import time
+from collections import deque, defaultdict
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.responses import JSONResponse
 
 import utils.logger  # noqa: F401 - initialize logging formatting
 
@@ -28,6 +32,50 @@ def include_all_routers(app: FastAPI, base_package: str, base_prefix: str = ""):
 
 
 app = FastAPI(title="Warframe Drop API", version="v1")
+
+
+class RateLimiterMiddleware(BaseHTTPMiddleware):
+    def __init__(self, app, max_requests: int = 90, window_seconds: int = 60):
+        super().__init__(app)
+        self.max_requests = max_requests
+        self.window = window_seconds
+        self.hits = defaultdict(deque)
+
+    async def dispatch(self, request: Request, call_next):
+        # Identify client by IP (use X-Forwarded-For when behind Caddy)
+        xff = request.headers.get("x-forwarded-for")
+        if xff:
+            client_id = xff.split(",")[0].strip()
+        else:
+            client_id = request.client.host if request.client else "unknown"
+
+        now = time.time()
+        q = self.hits[client_id]
+        # Remove timestamps older than window
+        while q and now - q[0] >= self.window:
+            q.popleft()
+        if len(q) >= self.max_requests:
+            # Too many requests
+            return JSONResponse(
+                status_code=429,
+                content={
+                    "detail": "Rate limit exceeded. Max 90 requests per 60 seconds.",
+                },
+                headers={
+                    "Retry-After": str(int(self.window - (now - q[0]))),
+                },
+            )
+        q.append(now)
+        response = await call_next(request)
+        return response
+
+
+# Add rate limiting middleware
+app.add_middleware(
+    RateLimiterMiddleware,
+    max_requests=int(os.getenv("RATE_LIMIT_PER_MIN", "90")),
+    window_seconds=60,
+)
 
 # CORS configuration: allow GitHub Pages frontend and local development
 _default_origins = [

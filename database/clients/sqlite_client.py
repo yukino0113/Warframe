@@ -5,9 +5,7 @@ from typing import Any, List, Optional
 
 class SqliteClient:
     def __init__(self, db_name: Optional[str] = None):
-        env_db_name = (
-            os.getenv("DB_NAME") or os.getenv("DB_PATH") or "database/warframe.db"
-        )
+        env_db_name = os.getenv("DB_NAME") or os.getenv("DB_PATH") or "data/warframe.db"
         self.conn = sqlite3.connect(db_name or env_db_name)
         self.cur = self.conn.cursor()
 

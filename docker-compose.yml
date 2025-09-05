@@ -3,11 +3,22 @@ version: "3.9"
 services:
   api:
     build: .
-    container_name: warframe
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./backend:/app/backend
+    container_name: warframe-api
     environment:
-      - DATABASE_URL=sqlite:///app/backend/warframe.db
+      - DB_PATH=/data/warframe.db
+      - RATE_LIMIT_PER_MIN=90
+    volumes:
+      - ./data:/data
+    expose:
+      - "8000"
     command: uvicorn backend.main:app --host 0.0.0.0 --port 8000
+
+  caddy:
+    image: caddy:2
+    container_name: warframe-caddy
+    depends_on:
+      - api
+    ports:
+      - "80:80"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
