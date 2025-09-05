@@ -73,7 +73,7 @@ class RateLimiterMiddleware(BaseHTTPMiddleware):
 # Add rate limiting middleware
 app.add_middleware(
     RateLimiterMiddleware,
-    max_requests=int(os.getenv("RATE_LIMIT_PER_MIN", "90")),
+    max_requests=90,
     window_seconds=60,
 )
 
