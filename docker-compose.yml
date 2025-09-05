@@ -5,7 +5,7 @@ services:
     build: .
     container_name: warframe-api
     environment:
-      - DB_PATH=/data/warframe.db
+      - DB_PATH=${DB_PATH}
       - RATE_LIMIT_PER_MIN=90
     volumes:
       - ./data:/data
