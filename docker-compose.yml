@@ -12,8 +12,6 @@ services:
       - ./data:/data
     expose:
       - "8000"
-    ports:
-      - "80:8000"
     command: uvicorn backend.main:app --host 0.0.0.0 --port 8000
 
   caddy:
@@ -23,5 +21,6 @@ services:
       - api
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
