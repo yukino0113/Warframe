@@ -3,11 +3,13 @@
 	admin off
 }
 
-:80 {
+{$SITE_DOMAIN} {
 	encode zstd gzip
 	log
+
 	# Reverse proxy to FastAPI service
 	reverse_proxy api:8000
+
 	# Optional basic headers
 	headers {
 		X-Frame-Options DENY

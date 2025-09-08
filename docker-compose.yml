@@ -17,6 +17,8 @@ services:
   caddy:
     image: caddy:2
     container_name: warframe-caddy
+    environment:
+      - SITE_DOMAIN=${API_HOST}
     depends_on:
       - api
     ports:
